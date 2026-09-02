@@ -4,3 +4,5 @@ dist/
 .env.local
 *.log
 .DS_Store
+
+# preview harness bundles are rebuilt on demand

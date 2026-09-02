@@ -14,6 +14,8 @@
     "dev": "npm run build:widgets && tsx watch src/server.ts",
     "start": "node dist/server.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test \"test/**/*.test.mjs\"",
+    "preview": "npm run build:widgets && node web/preview/serve.mjs",
     "inspector": "npx @modelcontextprotocol/inspector"
   },
   "dependencies": {

@@ -46,6 +46,31 @@ Anslut till `http://localhost:8788/mcp` (Transport: *Streamable HTTP*). Kör
 `tools/list`, anropa `show_training_week` och kontrollera att `resources/read`
 på `ui://widget/week.html` returnerar HTML.
 
+### Automatiska kontraktstester
+
+```bash
+npm test
+```
+
+`test/mcp.contract.test.mjs` startar servern (mock + auth av) i en subprocess
+och kör igenom `initialize`, `tools/list`, varje verktygsanrop och
+`resources/read` via den riktiga MCP-klienten. Verifierar bl.a. att varje
+verktygs `openai/outputTemplate` pekar på en registrerad widget-resurs, att
+`propose_ → apply_`-flödet funkar, och att servern svarar `401` +
+`WWW-Authenticate` när auth är på och token saknas. CI-vänligt (ingen tunnel,
+inget ChatGPT-konto).
+
+### Förhandsgranska widgetarna i webbläsaren
+
+```bash
+npm run preview      # http://localhost:4180
+```
+
+Renderar varje byggd widget-bundle i en iframe med en **mockad `window.openai`**
+(exempeldata, `callTool`/`setWidgetState`/`sendFollowupMessage` loggas på
+sidan). Växla widget och light/dark i toppmenyn. Bra för att se UI:t och testa
+bekräfta-knappen i förslagsvyn utan ChatGPT.
+
 ### Testa i ChatGPT (utvecklarläge)
 
 Kräver ett konto med **Developer Mode** för connectors. Exponera din lokala
