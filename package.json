@@ -1,0 +1,38 @@
+{
+  "name": "lopning-livet-chatgpt-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenAI Apps SDK app (MCP server + widgets) that exposes Löpning & Livet training data inside ChatGPT.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build:widgets": "node scripts/build-widgets.mjs",
+    "build:server": "tsc -p tsconfig.json",
+    "build": "npm run build:widgets && npm run build:server",
+    "dev": "npm run build:widgets && tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "inspector": "npx @modelcontextprotocol/inspector"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.19.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "jose": "^5.9.6",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "esbuild": "^0.24.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
