@@ -71,12 +71,48 @@ Renderar varje byggd widget-bundle i en iframe med en **mockad `window.openai`**
 sidan). Växla widget och light/dark i toppmenyn. Bra för att se UI:t och testa
 bekräfta-knappen i förslagsvyn utan ChatGPT.
 
-### Testa i ChatGPT (utvecklarläge)
+### E2E-test i ChatGPT (utvecklarläge)
 
-Kräver ett konto med **Developer Mode** för connectors. Exponera din lokala
-server med en tunnel (`ngrok http 8788` el. `cloudflared`), lägg till
-`https://<tunnel>/mcp` som egen connector och prova prompter som
-*"Vad ska jag springa den här veckan?"*.
+Sista milen – kräver **eget ChatGPT-konto med betald plan** (Developer Mode för
+egna connectors är inte gratis) och en publik HTTPS-tunnel.
+
+**1. Kör servern + tunnel (två terminaler):**
+
+```bash
+# engångs
+brew install cloudflared
+
+# terminal 1 – server på :8788 (mock-data, auth av)
+npm run dev
+
+# terminal 2 – publik HTTPS-URL
+cloudflared tunnel --url http://localhost:8788
+```
+
+`cloudflared` skriver ut `https://<slump>.trycloudflare.com`. Din MCP-endpoint är
+den + `/mcp`. URL:en byts varje gång du startar om tunneln.
+
+**2. Verifiera den publika URL:en innan ChatGPT:**
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+Anslut till `https://<slump>.trycloudflare.com/mcp`, transport *Streamable HTTP*.
+Kör `tools/list` och anropa `show_training_week`.
+
+**3. Lägg till i ChatGPT:**
+
+1. Inställningar → **Connectors** → *Advanced* → slå på **Developer mode**.
+2. **Add custom connector** → klistra in `https://<slump>.trycloudflare.com/mcp`
+   → autentisering: **No authentication** (dev-läget kör med `AUTH_DISABLED=true`).
+3. Nytt chattfönster → aktivera connectorn i verktygsmenyn → fråga
+   *"Vad ska jag springa den här veckan?"*.
+4. Förväntat: ChatGPT anropar `show_training_week` och renderar veckowidgeten
+   inline.
+
+> Med `AUTH_DISABLED=true` kan vem som helst med URL:en anropa servern. Det är
+> bara mock-data, men stäng tunneln när du testat klart.
 
 ---
 
