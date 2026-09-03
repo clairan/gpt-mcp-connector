@@ -6,3 +6,6 @@ dist/
 .DS_Store
 
 # preview harness bundles are rebuilt on demand
+
+# Claude Code personal settings
+.claude/settings.local.json
